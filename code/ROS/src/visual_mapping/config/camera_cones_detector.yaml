@@ -1,0 +1,18 @@
+/camera_cones_detector:
+  ros_parameters:
+    # Topics
+
+    #Settings
+    camera_intrinsics:
+    -
+    -
+    -
+    -
+    camera_distorsion:
+    -
+    camera_extrinsics:
+    -
+    -
+    -
+    -
+    
