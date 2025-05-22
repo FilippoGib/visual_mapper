@@ -1,0 +1,97 @@
+Loading cuda/11.8
+  ERROR: Module cannot be loaded due to a conflict.
+    HINT: Might try "module unload cuda" first.
+Downloading https://github.com/ultralytics/assets/releases/download/v8.3.0/yolov8n.pt to 'yolov8n.pt'...
+New https://pypi.org/project/ultralytics/8.3.126 available 😃 Update with 'pip install -U ultralytics'
+Ultralytics 8.3.125 🚀 Python-3.10.16 torch-2.7.0+cu126 CUDA:0 (NVIDIA GeForce RTX 2080 Ti, 11009MiB)
+[34m[1mengine/trainer: [0mtask=detect, mode=train, model=yolov8n.pt, data=/work/cvcs2025/gibertini_gombia_nels/datasets/fsoco/data.yaml, epochs=10, time=None, patience=100, batch=4, imgsz=640, save=True, save_period=-1, cache=False, device=0, workers=2, project=/homes/fgibertini/yolo_outputs, name=train, exist_ok=False, pretrained=True, optimizer=auto, verbose=True, seed=0, deterministic=True, single_cls=False, rect=False, cos_lr=False, close_mosaic=10, resume=False, amp=True, fraction=1.0, profile=False, freeze=None, multi_scale=False, overlap_mask=True, mask_ratio=4, dropout=0.0, val=True, split=val, save_json=False, conf=None, iou=0.7, max_det=300, half=False, dnn=False, plots=True, source=None, vid_stride=1, stream_buffer=False, visualize=False, augment=False, agnostic_nms=False, classes=None, retina_masks=False, embed=None, show=False, save_frames=False, save_txt=False, save_conf=False, save_crop=False, show_labels=True, show_conf=True, show_boxes=True, line_width=None, format=torchscript, keras=False, optimize=False, int8=False, dynamic=False, simplify=True, opset=None, workspace=None, nms=False, lr0=0.01, lrf=0.01, momentum=0.937, weight_decay=0.0005, warmup_epochs=3.0, warmup_momentum=0.8, warmup_bias_lr=0.1, box=7.5, cls=0.5, dfl=1.5, pose=12.0, kobj=1.0, nbs=64, hsv_h=0.015, hsv_s=0.7, hsv_v=0.4, degrees=0.0, translate=0.1, scale=0.5, shear=0.0, perspective=0.0, flipud=0.0, fliplr=0.5, bgr=0.0, mosaic=1.0, mixup=0.0, cutmix=0.0, copy_paste=0.0, copy_paste_mode=flip, auto_augment=randaugment, erasing=0.4, cfg=None, tracker=botsort.yaml, save_dir=/homes/fgibertini/yolo_outputs/train
+Overriding model.yaml nc=80 with nc=5
+
+                   from  n    params  module                                       arguments                     
+  0                  -1  1       464  ultralytics.nn.modules.conv.Conv             [3, 16, 3, 2]                 
+  1                  -1  1      4672  ultralytics.nn.modules.conv.Conv             [16, 32, 3, 2]                
+  2                  -1  1      7360  ultralytics.nn.modules.block.C2f             [32, 32, 1, True]             
+  3                  -1  1     18560  ultralytics.nn.modules.conv.Conv             [32, 64, 3, 2]                
+  4                  -1  2     49664  ultralytics.nn.modules.block.C2f             [64, 64, 2, True]             
+  5                  -1  1     73984  ultralytics.nn.modules.conv.Conv             [64, 128, 3, 2]               
+  6                  -1  2    197632  ultralytics.nn.modules.block.C2f             [128, 128, 2, True]           
+  7                  -1  1    295424  ultralytics.nn.modules.conv.Conv             [128, 256, 3, 2]              
+  8                  -1  1    460288  ultralytics.nn.modules.block.C2f             [256, 256, 1, True]           
+  9                  -1  1    164608  ultralytics.nn.modules.block.SPPF            [256, 256, 5]                 
+ 10                  -1  1         0  torch.nn.modules.upsampling.Upsample         [None, 2, 'nearest']          
+ 11             [-1, 6]  1         0  ultralytics.nn.modules.conv.Concat           [1]                           
+ 12                  -1  1    148224  ultralytics.nn.modules.block.C2f             [384, 128, 1]                 
+ 13                  -1  1         0  torch.nn.modules.upsampling.Upsample         [None, 2, 'nearest']          
+ 14             [-1, 4]  1         0  ultralytics.nn.modules.conv.Concat           [1]                           
+ 15                  -1  1     37248  ultralytics.nn.modules.block.C2f             [192, 64, 1]                  
+ 16                  -1  1     36992  ultralytics.nn.modules.conv.Conv             [64, 64, 3, 2]                
+ 17            [-1, 12]  1         0  ultralytics.nn.modules.conv.Concat           [1]                           
+ 18                  -1  1    123648  ultralytics.nn.modules.block.C2f             [192, 128, 1]                 
+ 19                  -1  1    147712  ultralytics.nn.modules.conv.Conv             [128, 128, 3, 2]              
+ 20             [-1, 9]  1         0  ultralytics.nn.modules.conv.Concat           [1]                           
+ 21                  -1  1    493056  ultralytics.nn.modules.block.C2f             [384, 256, 1]                 
+ 22        [15, 18, 21]  1    752287  ultralytics.nn.modules.head.Detect           [5, [64, 128, 256]]           
+Model summary: 129 layers, 3,011,823 parameters, 3,011,807 gradients, 8.2 GFLOPs
+
+Transferred 319/355 items from pretrained weights
+Freezing layer 'model.22.dfl.conv.weight'
+[34m[1mAMP: [0mrunning Automatic Mixed Precision (AMP) checks...
+Downloading https://github.com/ultralytics/assets/releases/download/v8.3.0/yolo11n.pt to 'yolo11n.pt'...
+[34m[1mAMP: [0mchecks passed ✅
+[34m[1mtrain: [0mFast image access ✅ (ping: 0.4±0.1 ms, read: 11.2±11.4 MB/s, size: 47.8 KB)
+[34m[1mval: [0mFast image access ✅ (ping: 0.4±0.1 ms, read: 20.4±16.7 MB/s, size: 43.5 KB)
+Plotting labels to /homes/fgibertini/yolo_outputs/train/labels.jpg... 
+[34m[1moptimizer:[0m 'optimizer=auto' found, ignoring 'lr0=0.01' and 'momentum=0.937' and determining best 'optimizer', 'lr0' and 'momentum' automatically... 
+[34m[1moptimizer:[0m AdamW(lr=0.001111, momentum=0.9) with parameter groups 57 weight(decay=0.0), 64 weight(decay=0.0005), 63 bias(decay=0.0)
+Image sizes 640 train, 640 val
+Using 2 dataloader workers
+Logging results to [1m/homes/fgibertini/yolo_outputs/train[0m
+Starting training for 10 epochs...
+Closing dataloader mosaic
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+                   all       2307      45870      0.715      0.397      0.457      0.271
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+                   all       2307      45870      0.727       0.43      0.497      0.298
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+                   all       2307      45870      0.698      0.462      0.512      0.315
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+                   all       2307      45870      0.709      0.486      0.531      0.326
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+                   all       2307      45870      0.735      0.487      0.544      0.338
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+                   all       2307      45870       0.73      0.491      0.548      0.341
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+                   all       2307      45870      0.721        0.5      0.554      0.349
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+                   all       2307      45870      0.731      0.512      0.566      0.358
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+                   all       2307      45870      0.731      0.523      0.574      0.364
+
+      Epoch    GPU_mem   box_loss   cls_loss   dfl_loss  Instances       Size
+                   all       2307      45870      0.749      0.528       0.58      0.371
+
+10 epochs completed in 0.419 hours.
+Optimizer stripped from /homes/fgibertini/yolo_outputs/train/weights/last.pt, 6.2MB
+Optimizer stripped from /homes/fgibertini/yolo_outputs/train/weights/best.pt, 6.2MB
+
+Validating /homes/fgibertini/yolo_outputs/train/weights/best.pt...
+Ultralytics 8.3.125 🚀 Python-3.10.16 torch-2.7.0+cu126 CUDA:0 (NVIDIA GeForce RTX 2080 Ti, 11009MiB)
+Model summary (fused): 72 layers, 3,006,623 parameters, 0 gradients, 8.1 GFLOPs
+                   all       2307      45870      0.749      0.528       0.58      0.371
+             blue_cone       1864      18132      0.868      0.591      0.686      0.434
+     large_orange_cone        602       1779      0.737       0.66      0.697      0.497
+           orange_cone        922       5040      0.807      0.596       0.66      0.418
+          unknown_cone        179       1646      0.478       0.19      0.168     0.0722
+           yellow_cone       1934      19273      0.854      0.605      0.691      0.433
+Speed: 0.2ms preprocess, 1.4ms inference, 0.0ms loss, 1.1ms postprocess per image
+Results saved to [1m/homes/fgibertini/yolo_outputs/train[0m
+💡 Learn more at https://docs.ultralytics.com/modes/train

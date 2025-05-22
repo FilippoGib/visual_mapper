@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>lap_counter</name>
+  <version>0.0.0</version>
+  <license>Apache 2.0</license>
+  <description>detects cones positions w.r.t. the car frame from camera images</description>
+
+  <maintainer email="filippogib@gmail.com">Filippo Gibertini</maintainer>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <depend>rclcpp</depend>
+  
+  <buildtool_depend>std_msgs</buildtool_depend>
+  <buildtool_depend>tf2</buildtool_depend>
+  <buildtool_depend>tf2_geometry_msgs</buildtool_depend>
+  <buildtool_depend>visualization_msgs</buildtool_depend>
+  <!-- <buildtool_depend>common_msgs</buildtool_depend> -->
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>tf2</exec_depend>
+  <exec_depend>tf2_geometry_msgs</exec_depend>
+  <exec_depend>visualization_msgs</exec_depend>
+  <!-- <exec_depend>common_msgs</exec_depend> -->
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+
+</package>

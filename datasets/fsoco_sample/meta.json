@@ -1,0 +1,81 @@
+{
+    "classes": [
+        {
+            "title": "seg_blue_cone",
+            "shape": "bitmap",
+            "color": "#2A00FF"
+        },
+        {
+            "title": "seg_unknown_cone",
+            "shape": "bitmap",
+            "color": "#3BDB0F"
+        },
+        {
+            "title": "seg_yellow_cone",
+            "shape": "bitmap",
+            "color": "#FFFF00"
+        },
+        {
+            "title": "blue_cone",
+            "shape": "rectangle",
+            "color": "#2A00FF"
+        },
+        {
+            "title": "orange_cone",
+            "shape": "rectangle",
+            "color": "#FF8000"
+        },
+        {
+            "title": "large_orange_cone",
+            "shape": "rectangle",
+            "color": "#FF002A"
+        },
+        {
+            "title": "unknown_cone",
+            "shape": "rectangle",
+            "color": "#3BDB0F"
+        },
+        {
+            "title": "seg_large_orange_cone",
+            "shape": "bitmap",
+            "color": "#FF002A"
+        },
+        {
+            "title": "seg_orange_cone",
+            "shape": "bitmap",
+            "color": "#FF8000"
+        },
+        {
+            "title": "yellow_cone",
+            "shape": "rectangle",
+            "color": "#FFFF00"
+        }
+    ],
+    "tags": [
+        {
+            "name": "train",
+            "color": "#0F8A60",
+            "value_type": "none"
+        },
+        {
+            "name": "test",
+            "color": "#0F258A",
+            "value_type": "none"
+        },
+        {
+            "name": "sticker_band_removed",
+            "color": "#7ED321",
+            "value_type": "none"
+        },
+        {
+            "name": "truncated",
+            "color": "#AC5FC4",
+            "value_type": "none"
+        },
+        {
+            "name": "knocked_over",
+            "color": "#8421ED",
+            "value_type": "none"
+        }
+    ]
+}

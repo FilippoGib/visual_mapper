@@ -1,0 +1,100 @@
+{
+    "description": "",
+    "tags": [],
+    "size": {
+        "height": 1360,
+        "width": 2200
+    },
+    "objects": [
+        {
+            "id": 458593150,
+            "classId": 1508153,
+            "description": "",
+            "geometryType": "bitmap",
+            "labelerLogin": "fsocov2",
+            "createdAt": "2020-06-07T13:04:38.085Z",
+            "updatedAt": "2020-06-07T13:04:38.085Z",
+            "tags": [],
+            "classTitle": "seg_yellow_cone",
+            "bitmap": {
+                "data": "eJwBZwGY/olQTkcNChoKAAAADUlIRFIAAAB2AAAAfgEDAAAAyzp3PwAAAAZQTFRFAAAA////pdmf3QAAAAF0Uk5TAEDm2GYAAAEPSURBVHicpdVBbsQgDAVQIy9YcgSOwtGYo+UoOUKWWUR1O00a7B8PXpTdUyTnGxkgGqvJRnp1+QKLZpK5+WlTrwSugfvTh7ZYJzAHzuCfeLLbOFM3cAeL483G1WZwDlzA73iy2ngzd7BYJ9eLjaucwcX1y8ZVbuAeWKzPeGMcOXAGF3B1PcaxgTtY5mbf9zjmwDVwA5/xxjjK3AnM4PzBm93N2xXcAl9xz/H7+3hZ5H/uyovjBq7gEjgrvxwzOIEpsgpsNs/xQraBFbyTbeAgCExOYO0VGtgc6wZ2aMANQOgMHi1eTuC7x/sAoK9/4gH+fGE8LqgEPksuw78lV2UWsQ9wBSf7YLxLWlM/rPn4BsOCd9SzDSBzAAAAAElFTkSuQmCCZXKaLw==",
+                "origin": [
+                    1653,
+                    830
+                ]
+            }
+        },
+        {
+            "id": 458593149,
+            "classId": 1508153,
+            "description": "",
+            "geometryType": "bitmap",
+            "labelerLogin": "fsocov2",
+            "createdAt": "2020-06-07T13:04:38.085Z",
+            "updatedAt": "2020-06-07T13:04:38.085Z",
+            "tags": [],
+            "classTitle": "seg_yellow_cone",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtJqQKzDyAwkjTMiuoEUW4BPiCuQ/v///9Kb8+8CWYwlQX7BDA7PbqQBOTGeLo4hFXN8z2/kdVDkcA3saVVVtuhavHOV8p9Lh1r0w4Uz/RwfMCoppea6NItGb1hsK/zs9ReJkDUHy/7WfJnZJMmdtSGJe9Zu6VwPd+55XUlO86VU/L/prauafn9/yd8PmoVJ2U/ctgLtYfB09XNZ55TQBAAmfT+l",
+                "origin": [
+                    1744,
+                    761
+                ]
+            }
+        },
+        {
+            "id": 458593148,
+            "classId": 1508153,
+            "description": "",
+            "geometryType": "bitmap",
+            "labelerLogin": "fsocov2",
+            "createdAt": "2020-06-07T13:04:38.085Z",
+            "updatedAt": "2020-06-07T13:04:38.085Z",
+            "tags": [],
+            "classTitle": "seg_yellow_cone",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtJyQKzAyAwk7fuibIAUW4BPiCuQ/v///9Kb8+8CWYwlQX7BDA7PbqQBOb6eLo4hFXNsT2/kPODA4xwoq7fuC4d5l/vnLElV5SU+ggFrHhd8ftDMcsCOYXPhRhcTzYieY0dEzn0X8OUSe/zhyjaPg2nLuZXzbbtUfRTWyeflu8mFK+ubAw1m8HT1c1nnlNAEAEOwNUs=",
+                "origin": [
+                    1899,
+                    778
+                ]
+            }
+        },
+        {
+            "id": 458593147,
+            "classId": 1508153,
+            "description": "",
+            "geometryType": "bitmap",
+            "labelerLogin": "fsocov2",
+            "createdAt": "2020-06-07T13:04:38.085Z",
+            "updatedAt": "2020-06-07T13:04:38.085Z",
+            "tags": [],
+            "classTitle": "seg_yellow_cone",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtJ8QCzIyAwkr7Px3wFSbAE+Ia5A+v///0tvzr8LZDGWBPkFMzg8u5EG5Kh7ujiGVMxJTliRmPDj8AEOtzcJR/63O/7jb7aV+OvuZi/xyt7gRj0DwzN7sWn+sx5LALUweLr6uaxzSmgCAH0FKA0=",
+                "origin": [
+                    1829,
+                    750
+                ]
+            }
+        },
+        {
+            "id": 458593146,
+            "classId": 1508153,
+            "description": "",
+            "geometryType": "bitmap",
+            "labelerLogin": "fsocov2",
+            "createdAt": "2020-06-07T13:04:38.085Z",
+            "updatedAt": "2020-06-07T13:04:38.085Z",
+            "tags": [],
+            "classTitle": "seg_yellow_cone",
+            "bitmap": {
+                "data": "eJzrDPBz5+WS4mJgYOD19HAJAtJ8QCzGyAwkTzHbpwAptgCfEFcg/f///6U3598FshhLgvyCGRye3UgDcnQ9XRxDKuYkJ/w4yODSk3CEx+2NvcSPxhf8zTYSN5kv8rf9kuf5HygYwKKh95+RwY5fZmZ+29wPQI0Mnq5+LuucEpoACMgoCw==",
+                "origin": [
+                    1473,
+                    682
+                ]
+            }
+        }
+    ]
+}
