@@ -1,6 +1,10 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MultipleLocator
+from matplotlib.patches import Polygon, Rectangle
+
+
 
 def click_event(event, x, y, flags, param):
     if event == cv2.EVENT_LBUTTONDOWN:
@@ -65,45 +69,131 @@ rotation = rotation @ R_x # apply pitch to original rotation matrix
 
 ############################### MANUALLY SELECT PIXELS OF CONES BASE ###############################
 clicked_points = []
+crosshair_color = (255, 255, 255)
+marker_color = (0, 165, 255)  # Orange-like color
+font = cv2.FONT_HERSHEY_SIMPLEX
 
 img = cv2.imread('image2.png')
 img_display = img.copy()
 
-cv2.imshow("Select Cones", img_display)
+# Create a copy for drawing cursor overlays separately
+overlay = img.copy()
+
+# Initialize mouse position
+mouse_pos = (0, 0)
+
+def click_event(event, x, y, flags, param):
+    global img_display
+    if event == cv2.EVENT_LBUTTONDOWN:
+        clicked_points.append((x, y))
+
+        # Elegant thin cross: longer horizontal, shorter vertical
+        horizontal_len = 6
+        vertical_len = 3
+
+        cv2.line(img_display, (x - horizontal_len, y), (x + horizontal_len, y), marker_color, 1)
+        cv2.line(img_display, (x, y - vertical_len), (x, y + vertical_len), marker_color, 1)
+
+        # Number label near the point
+        label_pos = (x + 10, y - 10)
+        label = str(len(clicked_points))
+        
+        # White border (drawn first, slightly thicker)
+        cv2.putText(img_display, label, label_pos, font, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
+        
+        # Black fill (drawn second, thinner)
+        cv2.putText(img_display, label, label_pos, font, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
+        
+    elif event == cv2.EVENT_MOUSEMOVE:
+        global overlay, mouse_pos
+        mouse_pos = (x, y)
+        overlay = img_display.copy()
+
+        # Draw crosshairs at the cursor
+        cv2.line(overlay, (x, 0), (x, overlay.shape[0]), crosshair_color, 1)
+        cv2.line(overlay, (0, y), (overlay.shape[1], y), crosshair_color, 1)
+
+        # Optional: show coordinates at top-left
+        cv2.rectangle(overlay, (10, 10), (140, 35), (0, 0, 0), -1)
+        cv2.putText(overlay, f"({x}, {y})", (15, 30), font, 0.6, (255, 255, 255), 1, cv2.LINE_AA)
+
+cv2.namedWindow("Select Cones")
 cv2.setMouseCallback("Select Cones", click_event)
 
-print("Click on cone bases. Press 'q' to finish.")
-
 while True:
+    cv2.imshow("Select Cones", overlay)
     key = cv2.waitKey(1) & 0xFF
-    if key == ord('q'):  # press "q" when you are done
+    if key == ord('q'):
         break
 
 cv2.destroyAllWindows()
 
+# Backproject to 3D world
 real_world_points = np.empty((0, 3))
 
-print("\nProjected cone positions in global frame (meters):")
-for (u, v) in clicked_points:
+for i, (u, v) in enumerate(clicked_points):
     X_world = backproject_pixel_to_ground(u, v, K=intrinsics, D=distortion, R=rotation, t=translation)
     real_world_points = np.vstack([real_world_points, X_world])
-    print(f"Pixel ({u}, {v}) -> World: {X_world}")
+    print(f"{i+1:02d}. Pixel ({u}, {v}) -> World: {X_world}")
 
-X = real_world_points[:, 0]  # forward (rigth hand convention for automotive)
-Y = real_world_points[:, 1]  # lateral (rigth hand convention for automotive)
+X = real_world_points[:, 0]  # forward (right-hand convention)
+Y = real_world_points[:, 1]  # lateral (right-hand convention)
 
-# Plot
-plt.figure(figsize=(8, 6))
-plt.scatter(X, Y, c='red', s=100, label='Cones')
-plt.axhline(0, color='gray', linestyle='--')
-plt.axvline(0, color='gray', linestyle='--')
+############################### VISUALIZATION ###############################
 
-plt.title('Cone positions in world (car) frame')
-plt.xlabel('X (meters, forward)')
-plt.ylabel('Y (meters, lateral)')
-plt.grid(True)
+plt.figure(figsize=(10, 6))
+ax = plt.gca()
+
+# Parameters for cone shape
+cone_height = 0.6   # meters
+cone_width = 0.25   # meters
+stripe_height = 0.20  # height of the white stripe
+stripe_offset = 0.30  # vertical offset from tip for stripe
+
+# Add triangle patches for each cone
+for i, (x, y) in enumerate(zip(X, Y)):
+    # Triangle points for cone (isosceles triangle)
+    triangle = np.array([
+        [y, x],                                # tip
+        [y - cone_width / 2, x - cone_height],  # bottom left
+        [y + cone_width / 2, x - cone_height]   # bottom right
+    ])
+    cone_patch = Polygon(triangle, closed=True, facecolor='blue', edgecolor='black', zorder=3)
+    ax.add_patch(cone_patch)
+
+    # Add the cone index label above the cone
+    plt.text(
+        y + cone_width / 2 - 0.30,          # a bit to the right of the base
+        x - cone_height,             # aligned with base + small vertical offset
+        str(i + 1),
+        fontsize=12,
+        fontweight='bold',
+        color='black',
+        verticalalignment='bottom',
+        zorder=5
+    )
+
+# Axes lines
+plt.axvline(0, color='black', linestyle='--', linewidth=1)
+plt.axhline(0, color='black', linestyle='--', linewidth=1)
+
+# Labels and title
+plt.title('Cone Positions in Vehicle Frame', fontsize=16, fontweight='bold')
+plt.xlabel('Lateral Position Y (m)', fontsize=14)
+plt.ylabel('Forward Position X (m)', fontsize=14)
+
+# Grid and tick marks
+plt.grid(True, which='both', linestyle='--', linewidth=0.5)
+plt.minorticks_on()
+plt.tick_params(axis='both', which='major', labelsize=12)
+plt.gca().xaxis.set_major_locator(MultipleLocator(2.0))
+plt.gca().yaxis.set_major_locator(MultipleLocator(2.0))
+
+# Maintain aspect ratio and invert X to show left as positive
 plt.axis('equal')
-plt.legend()
+plt.gca().invert_xaxis()
+
+plt.tight_layout()
 plt.show()
 
 
