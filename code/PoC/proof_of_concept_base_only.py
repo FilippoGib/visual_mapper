@@ -39,7 +39,6 @@ def backproject_pixel_to_ground_with_distortion(u, v, K, D, R, t):
     x_n, y_n = undistorted[0, 0]
     ray_cam = np.array([x_n, y_n, 1.0])
     n_world = np.array([0, 0, 1])
-    d_world = 0
     n_cam = R.T @ n_world
     d_cam = n_world @ t
     lam = -d_cam / (n_cam @ ray_cam)
@@ -77,7 +76,7 @@ def main():
         [0, -1, 0]
     ])
     distortion = np.array([-0.07456768657066797, 0.058448908740040065, -0.0005864815992339291, -9.326095667942688e-05, -0.02495779671549341 ])
-    theta_deg = -20.0
+    theta_deg = -17.0
     theta_rad = np.deg2rad(theta_deg)
     R_x = np.array([
         [1, 0, 0],
@@ -97,7 +96,7 @@ def main():
         'mouse_pos': (0, 0)
     }
 
-    img = cv2.imread('image2.png')
+    img = cv2.imread('image3.png')
     state['img_display'] = img.copy()
     state['overlay'] = img.copy()
 
