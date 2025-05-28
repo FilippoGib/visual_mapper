@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="3">
-  <name>lap_counter</name>
+  <name>camera_cones_detector</name>
   <version>0.0.0</version>
   <license>Apache 2.0</license>
   <description>detects cones positions w.r.t. the car frame from camera images</description>

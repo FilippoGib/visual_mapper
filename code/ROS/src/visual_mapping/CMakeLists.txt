@@ -23,7 +23,8 @@ find_package(tf2 REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 find_package(visualization_msgs REQUIRED)
 find_package(Eigen3 REQUIRED)
-# find_package(common_msgs REQUIRED)
+find_package(yolo_msgs REQUIRED)
+find_package(OpenCV REQUIRED)
 
 include_directories(
   include/camera_cones_detector
@@ -38,7 +39,8 @@ ament_target_dependencies(camera_cones_detector
     tf2_geometry_msgs
     visualization_msgs
     Eigen3
-    # common_msgs
+    yolo_msgs
+    OpenCV
     )
 
 add_executable(camera_cones_detector_node src/camera_cones_detector_node.cpp)
