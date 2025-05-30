@@ -23,11 +23,12 @@ find_package(tf2 REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 find_package(visualization_msgs REQUIRED)
 find_package(Eigen3 REQUIRED)
-find_package(yolo_msgs REQUIRED)
 find_package(OpenCV REQUIRED)
+find_package(vision_msgs REQUIRED)
 
 include_directories(
   include/camera_cones_detector
+  ${vision_msgs_INCLUDE_DIRS}
 )
 
 add_library(camera_cones_detector src/camera_cones_detector.cpp)
@@ -35,12 +36,10 @@ add_library(camera_cones_detector src/camera_cones_detector.cpp)
 ament_target_dependencies(camera_cones_detector
     rclcpp
     std_msgs
-    tf2
-    tf2_geometry_msgs
     visualization_msgs
     Eigen3
-    yolo_msgs
     OpenCV
+    vision_msgs
     )
 
 add_executable(camera_cones_detector_node src/camera_cones_detector_node.cpp)

@@ -1,5 +1,8 @@
 #include "camera_cones_detector.hpp"
-#include "yolo_msgs/msg/detection_array.hpp"
+#include "vision_msgs/msg/bounding_box2_d.hpp"
+#include "vision_msgs/msg/detection2_d.hpp"
+#include "vision_msgs/msg/detection2_d_array.hpp"
+#include "geometry_msgs/msg/pose2_d.hpp"
 #include <rclcpp/rclcpp.hpp>
 #include <Eigen/Dense>
 
@@ -21,7 +24,7 @@ void ConesDetector::initialize()
     qos_rel.reliable();
 
     // Initialize publishers and subscribers
-    m_input_sub = this->create_subscription<yolo_msgs::DetectionArray>(
+    m_input_sub = this->create_subscription<vision_msgs::msg::Detection2DArray>(
         m_input_topic, 10,
         std::bind(&ConesDetector::boundingBoxesCallback, this, std::placeholders::_1)
     );
@@ -62,31 +65,35 @@ Eigen::Vector3d backprojectPixelToGroundWithDistortion(
 }
 
 
-void ConesDetector::boundingBoxesCallback(const yolo_msgs::DetectionArray::SharedPtr msg)
+void ConesDetector::boundingBoxesCallback(const vision_msgs::msg::Detection2DArray::SharedPtr msg)
 {
     visualization_msgs::msg::MarkerArray marker_array;
 
     int id = 0;
     for (const auto& detection : msg->detections)
     {
-        // Extract bounding box (assuming detection has bbox: xmin, ymin, xmax, ymax)
-        // If your detection message format differs, adapt accordingly
-        double xmin = detection.xmin;
-        double ymin = detection.ymin;
-        double xmax = detection.xmax;
-        double ymax = detection.ymax;
+        // Bounding box center and size
+        double center_x = detection.bbox.center.position.x;
+        double center_y = detection.bbox.center.position.y;
+        double width = detection.bbox.size_x;
+        double height = detection.bbox.size_y;
+
+        // Convert to corners
+        double xmin = center_x - width / 2.0;
+        double xmax = center_x + width / 2.0;
+        double ymin = center_y - height / 2.0;
+        double ymax = center_y + height / 2.0;
 
         // Compute bottom center and top center pixel coordinates
         double base_u = (xmin + xmax) / 2.0;
-        double base_v = ymax;  // bottom of bounding box
+        double base_v = ymax;
 
         double tip_u = (xmin + xmax) / 2.0;
-        double tip_v = ymin;   // top of bounding box
+        double tip_v = ymin;
 
-        // Backproject pixels to 3D points (assume ground plane Z=0 for base, Z=cone_height for tip)
-        // Use your actual camera intrinsics, distortion, rotation R, and translation t here
+        // Backproject to 3D
         double ground_z = 0.0;
-        double cone_height = 0.35;  // example cone height in meters
+        double cone_height = 0.35;
 
         Eigen::Vector3d base_3d = backprojectPixelToGroundWithDistortion(
             base_u, base_v, K, distCoeffs, R, t, ground_z);
@@ -94,38 +101,30 @@ void ConesDetector::boundingBoxesCallback(const yolo_msgs::DetectionArray::Share
         Eigen::Vector3d tip_3d = backprojectPixelToGroundWithDistortion(
             tip_u, tip_v, K, distCoeffs, R, t, cone_height);
 
-        // Create a marker representing the cone (using LINE_LIST for simplicity)
+        // Create marker
         visualization_msgs::msg::Marker marker;
         marker.header = msg->header;
         marker.ns = "cones";
         marker.id = id++;
         marker.type = visualization_msgs::msg::Marker::LINE_LIST;
         marker.action = visualization_msgs::msg::Marker::ADD;
-        marker.scale.x = 0.02;  // line width
+        marker.scale.x = 0.02;
 
         marker.color.r = 1.0f;
         marker.color.g = 0.5f;
         marker.color.b = 0.0f;
         marker.color.a = 1.0f;
 
-        // Base point
-        geometry_msgs::msg::Point base_pt;
-        base_pt.x = base_3d.x();
-        base_pt.y = base_3d.y();
-        base_pt.z = base_3d.z();
+        geometry_msgs::msg::Point base_pt, tip_pt;
+        base_pt.x = base_3d.x(); base_pt.y = base_3d.y(); base_pt.z = base_3d.z();
+        tip_pt.x = tip_3d.x();   tip_pt.y = tip_3d.y();   tip_pt.z = tip_3d.z();
 
-        // Tip point
-        geometry_msgs::msg::Point tip_pt;
-        tip_pt.x = tip_3d.x();
-        tip_pt.y = tip_3d.y();
-        tip_pt.z = tip_3d.z();
-
-        // Add lines for the cone sides (simplified as a line from base to tip)
         marker.points.push_back(base_pt);
         marker.points.push_back(tip_pt);
 
         marker_array.markers.push_back(marker);
     }
+
 
     m_output_pub->publish(marker_array);
 }
