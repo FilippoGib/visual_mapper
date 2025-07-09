@@ -1,20 +1,37 @@
-// #include <cv2>
-// #include <Eigen3>
-#include <rclcpp.hpp>
-#include <visualization_msgs/msg/Marker.hpp>
-#include <eigen3/Eigen/Geometry>
-#include <vector>
+#ifndef CAMERA_CONES_DETECTOR_HPP
+#define CAMERA_CONES_DETECTOR_HPP
 
-namespace  cones_detector 
+#include <rclcpp/rclcpp.hpp>
+#include <vision_msgs/msg/detection2_d_array.hpp>
+#include <visualization_msgs/msg/marker_array.hpp>
+#include <opencv2/opencv.hpp>
+#include <Eigen/Dense>
+
+class ConesDetector : public rclcpp::Node
 {
- class ConesDetector : rclcpp::Node
- {
-
+public:
     ConesDetector();
-    std::vector<visualization_msgs::msg::Marker> boundingBoxesCallback();
 
-    private:
-    ~ConesDetector();
-    
- }
-} // cones detector
+private:
+    // Callback
+    void boundingBoxesCallback(const vision_msgs::msg::Detection2DArray::SharedPtr msg);
+
+    // Methods
+    void initialize();
+    void load_parameters();
+
+    // Publishers and subscribers
+    rclcpp::Subscription<vision_msgs::msg::Detection2DArray>::SharedPtr m_input_sub;
+    rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr m_output_pub;
+
+    // Topics
+    std::string m_input_topic;
+    std::string m_output_topic;
+
+    // Camera parameters (presumibilmente definiti altrove)
+    cv::Mat K, distCoeffs;
+    Eigen::Matrix3d R;
+    Eigen::Vector3d t;
+};
+
+#endif // CAMERA_CONES_DETECTOR_HPP

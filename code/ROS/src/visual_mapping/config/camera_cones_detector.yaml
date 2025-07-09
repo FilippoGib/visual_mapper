@@ -1,7 +1,8 @@
 /camera_cones_detector:
   ros_parameters:
     # Topics
-
+    input_topic: /
+    output_topic: /
     #Settings
     camera_intrinsics:
     -
