@@ -2,8 +2,8 @@
 node = ros2node("matlab_birdeye");
 
 % subscribe to the image and camera_info topics
-imageSub   = ros2subscriber(node,'/zed2i/zed_node/rgb/image_rect_color',   'sensor_msgs/Image');
-camInfoSub = ros2subscriber(node,'/zed2i/zed_node/camera_info',           'sensor_msgs/CameraInfo');
+imageSub   = ros2subscriber(node,'/zed2/zed_node/rgb/image_rect_color',   'sensor_msgs/Image');
+camInfoSub = ros2subscriber(node,'/zed2/zed_node/camera_info',           'sensor_msgs/CameraInfo');
 
 % grab one CameraInfo message to build intrinsics
 disp('Waiting for camera_info…');
