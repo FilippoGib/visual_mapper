@@ -1,9 +1,9 @@
-
 node = ros2node("matlab_birdeye");
 
-% subscribe to the image and camera_info topics
-imageSub   = ros2subscriber(node,'/zed/zed_node/rgb/image_rect_color',   'sensor_msgs/Image');
-camInfoSub = ros2subscriber(node,'/zed/zed_node/camera_info',           'sensor_msgs/CameraInfo');
+% create sub for camer info
+camInfoSub = ros2subscriber(node, ...
+                            '/zed/zed_node/camera_info', ...
+                            'sensor_msgs/CameraInfo');
 
 % grab one CameraInfo message to build intrinsics
 disp('Waiting for camera_info…');
@@ -34,31 +34,34 @@ outImageSize    = [NaN, 2000];
 
 birdsEye = birdsEyeView(sensor, outView, outImageSize);
 
-figure('Name','ZED2i Live BEV','NumberTitle','off');
-while ishandle(gcf)  % run until you close the figure
-    % receive the next image (timeout after 10s)
-    imgMsg = receive(imageSub, 10);
-    if isempty(imgMsg)
-        warning('No image received this cycle.');
-        continue;
-    end
+fig = figure('Name','ZED2 Live BEV','NumberTitle','off');
 
-    % convert to MATLAB image
-    I = readImage(imgMsg);
+imageSub   = ros2subscriber(node, ...
+                            '/zed/zed_node/rgb/image_rect_color',...
+                            'sensor_msgs/Image',...
+                            @(~,msg) imageCallback(msg, birdsEye, fig));
 
-    % do your BEV transform
+
+disp('Listening for images. Close the figure window to stop.');
+
+waitfor(fig)
+
+% Clean up
+clear imageSub camInfoSub
+
+
+function imageCallback(msg, birdsEye, fig)
+    % Convert ROS image → MATLAB image
+    I = readImage(msg);
+
+    % Apply bird’s‑eye transform
     BEV = transformImage(birdsEye, I);
 
-    % display side‑by‑side
-    subplot(1,2,1);
-    imshow(I);
-    title('Original ZED Image');
-
-    subplot(1,2,2);
-    imshow(BEV);
-    title('Bird''s-Eye View');
-
-    drawnow;
+    % Display (keep using the same figure)
+    if ishandle(fig)
+        figure(fig);
+        subplot(1,2,1), imshow(I),   title('Original ZED Image');
+        subplot(1,2,2), imshow(BEV), title('Bird''s‑Eye View');
+        drawnow;
+    end
 end
-
-clear imageSub camInfoSub
