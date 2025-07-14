@@ -34,34 +34,40 @@ outImageSize    = [NaN, 2000];
 
 birdsEye = birdsEyeView(sensor, outView, outImageSize);
 
-fig = figure('Name','ZED2 Live BEV','NumberTitle','off');
+birdEyeImagePub = ros2publisher(node, ...
+                            '/zed/zed_node/bird_eye_view/image', ...
+                            'sensor_msgs/Image');
 
 imageSub   = ros2subscriber(node, ...
                             '/zed/zed_node/rgb/image_rect_color',...
                             'sensor_msgs/Image',...
-                            @(~,msg) imageCallback(msg, birdsEye, fig));
+                            @(~,msg) imageCallback(msg, birdsEye, birdEyeImagePub));
 
-
-disp('Listening for images. Close the figure window to stop.');
-
-waitfor(fig)
+waitfor(node)
 
 % Clean up
 clear imageSub camInfoSub
 
 
-function imageCallback(msg, birdsEye, fig)
+function imageCallback(msg, birdsEye, birdEyeImagePub)
     % Convert ROS image → MATLAB image
     I = readImage(msg);
 
     % Apply bird’s‑eye transform
     BEV = transformImage(birdsEye, I);
 
-    % Display (keep using the same figure)
-    if ishandle(fig)
-        figure(fig);
-        subplot(1,2,1), imshow(I),   title('Original ZED Image');
-        subplot(1,2,2), imshow(BEV), title('Bird''s‑Eye View');
-        drawnow;
-    end
+    % Convert BEV to ROS 'sensor_msgs/Image'
+    birdEyeImageMsg = ... 
+        ros2message('sensor_msgs/Image', ...
+                    'Data', BEV, ...
+                    'Height', size(BEV, 1), ...
+                    'Width', size(BEV, 2), ...
+                    'Encoding', 'rgb8', ...
+                    'Step', size(BEV, 2) * 3);
+
+    % Publish the bird’s-eye view image
+    send(birdEyeImagePub, birdEyeImageMsg);
+
+    clear BEV
+
 end
