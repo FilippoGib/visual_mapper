@@ -1,9 +1,9 @@
-node = ros2node("matlab_birdeye");
+node = ros2node("matlab_birdeye_publisher");
 
 % create sub for camer info
 camInfoSub = ros2subscriber(node, ...
-                            '/zed/zed_node/camera_info', ...
-                            'sensor_msgs/CameraInfo');
+'/zed/zed_node/camera_info', ...
+'sensor_msgs/CameraInfo');
 
 % grab one CameraInfo message to build intrinsics
 disp('Waiting for camera_info…');
@@ -34,34 +34,35 @@ outImageSize    = [NaN, 2000];
 
 birdsEye = birdsEyeView(sensor, outView, outImageSize);
 
-fig = figure('Name','ZED2 Live BEV','NumberTitle','off');
+% Create ROS2 publisher for the bird's eye view image
+bevImagePub = ros2publisher(node, '/bird_eye_view_image', 'sensor_msgs/Image', 1);
 
-imageSub   = ros2subscriber(node, ...
-                            '/zed/zed_node/rgb/image_rect_color',...
-                            'sensor_msgs/Image',...
-                            @(~,msg) imageCallback(msg, birdsEye, fig));
 
+imageSub = ros2subscriber(node, ...
+    '/zed/zed_node/rgb/image_rect_color',...
+    'sensor_msgs/Image',...
+    @(~,msg) imageCallback(msg, birdsEye, bevImagePub));
 
 disp('Listening for images. Close the figure window to stop.');
 
-waitfor(fig)
+waitfor(imageSub) % Wait for the subscriber to be active. Necessary for clean exit.
 
 % Clean up
-clear imageSub camInfoSub
+clear imageSub camInfoSub bevImagePub
 
-
-function imageCallback(msg, birdsEye, fig)
+function imageCallback(msg, birdsEye, bevImagePub)
     % Convert ROS image → MATLAB image
     I = readImage(msg);
 
     % Apply bird’s‑eye transform
     BEV = transformImage(birdsEye, I);
 
-    % Display (keep using the same figure)
-    if ishandle(fig)
-        figure(fig);
-        subplot(1,2,1), imshow(I),   title('Original ZED Image');
-        subplot(1,2,2), imshow(BEV), title('Bird''s‑Eye View');
-        drawnow;
-    end
+    % Convert the bird's-eye view image back into a ROS message
+    bevImageMsg = ros2msg(bevImageMsgType(BEV), BEV);
+
+    % Publish the bird's-eye view image
+    send(bevImagePub, bevImageMsg);
+
+    % Clean up explicitly
+    clear I BEV bevImageMsg
 end
