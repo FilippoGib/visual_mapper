@@ -1,3 +1,5 @@
+global i;
+
 node = ros2node("matlab_birdeye_publisher");
 
 % create sub for camer info
@@ -34,10 +36,11 @@ outImageSize    = [NaN, 2000];
 
 birdsEye = birdsEyeView(sensor, outView, outImageSize);
 
-<<<<<<< HEAD
 birdEyeImagePub = ros2publisher(node, ...
                             '/zed/zed_node/bird_eye_view/image', ...
                             'sensor_msgs/Image');
+
+i = 0;
 
 imageSub   = ros2subscriber(node, ...
                             '/zed/zed_node/rgb/image_rect_color',...
@@ -45,60 +48,36 @@ imageSub   = ros2subscriber(node, ...
                             @(~,msg) imageCallback(msg, birdsEye, birdEyeImagePub));
 
 waitfor(node)
-=======
-% Create ROS2 publisher for the bird's eye view image
-bevImagePub = ros2publisher(node, '/bird_eye_view_image', 'sensor_msgs/Image', 1);
-
-
-imageSub = ros2subscriber(node, ...
-    '/zed/zed_node/rgb/image_rect_color',...
-    'sensor_msgs/Image',...
-    @(~,msg) imageCallback(msg, birdsEye, bevImagePub));
-
-disp('Listening for images. Close the figure window to stop.');
-
-waitfor(imageSub) % Wait for the subscriber to be active. Necessary for clean exit.
->>>>>>> dc3f6e9789b939590f8ae3bffb9e7bacb113a319
 
 % Clean up
 clear imageSub camInfoSub bevImagePub
 
-<<<<<<< HEAD
 
 function imageCallback(msg, birdsEye, birdEyeImagePub)
-=======
-function imageCallback(msg, birdsEye, bevImagePub)
->>>>>>> dc3f6e9789b939590f8ae3bffb9e7bacb113a319
-    % Convert ROS image → MATLAB image
-    I = readImage(msg);
 
-    % Apply bird’s‑eye transform
-    BEV = transformImage(birdsEye, I);
+    global i;
+    
+    if mod(i, 10) == 0
+        % Convert ROS image → MATLAB image
+        I = readImage(msg);
 
-<<<<<<< HEAD
-    % Convert BEV to ROS 'sensor_msgs/Image'
-    birdEyeImageMsg = ... 
-        ros2message('sensor_msgs/Image', ...
-                    'Data', BEV, ...
-                    'Height', size(BEV, 1), ...
-                    'Width', size(BEV, 2), ...
-                    'Encoding', 'rgb8', ...
-                    'Step', size(BEV, 2) * 3);
+        % Apply bird’s‑eye transform
+        BEV = transformImage(birdsEye, I);
 
-    % Publish the bird’s-eye view image
-    send(birdEyeImagePub, birdEyeImageMsg);
+        % Convert BEV to ROS 'sensor_msgs/Image'
+        birdEyeImageMsg = ... 
+            ros2message('sensor_msgs/Image', ...
+                        'Data', BEV, ...
+                        'Height', size(BEV, 1), ...
+                        'Width', size(BEV, 2), ...
+                        'Encoding', 'rgb8', ...
+                        'Step', size(BEV, 2) * 3);
 
-    clear BEV
+        % Publish the bird’s-eye view image
+        send(birdEyeImagePub, birdEyeImageMsg);
 
+        clear BEV
+        i = 0;
+    end
+    i = i + 1;
 end
-=======
-    % Convert the bird's-eye view image back into a ROS message
-    bevImageMsg = ros2msg(bevImageMsgType(BEV), BEV);
-
-    % Publish the bird's-eye view image
-    send(bevImagePub, bevImageMsg);
-
-    % Clean up explicitly
-    clear I BEV bevImageMsg
-end
->>>>>>> dc3f6e9789b939590f8ae3bffb9e7bacb113a319
