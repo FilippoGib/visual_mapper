@@ -5,7 +5,7 @@ This repository contains the implementation of a visual mapping pipeline develop
 ## 🚗 Overview
 
 The pipeline consists of five core components:
-1. **Cone Detection** – YOLOv8-m object detector fine-tuned on the FSOCO dataset.
+1. **Cone Detection** – YOLOv11-m object detector fine-tuned on the FSOCO dataset.
 2. **Visual-Inertial SLAM** – Real-time vehicle odometry from stereo + IMU.
 3. **Depth Map Generation** – Stereo triangulation for per-pixel depth estimation.
 4. **Fusion Module** – Projects 2D detections into 3D camera and car frames.
