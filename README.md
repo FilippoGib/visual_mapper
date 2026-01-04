@@ -1,3 +1,5 @@
+WARNING: the development of this project has been migrated [here](https://github.com/leonardonels/computer_vision_and_cognitive_systems_exam_project), please reference that repository for the most up-to-date version.
+
 # Visual Mapping Pipeline for Autonomous Racing
 
 This repository contains the implementation of a visual mapping pipeline developed for Formula Student Driverless (FSD) autonomous racing competitions. The system performs robust traffic cone detection, real-time vehicle localization, and global mapping using stereo vision and sensor fusion techniques.
